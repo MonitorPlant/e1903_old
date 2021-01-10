@@ -1,0 +1,4 @@
+main.c: 変数の宣言、スレッド呼び出し
+main_loop_thread.h/c 
+
+

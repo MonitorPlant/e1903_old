@@ -1,0 +1,44 @@
+必要なオブジェクト
+	メインキャラクター(自分/敵)
+		変更確認
+		X座標
+		Y座標
+		
+	出てくる的(最大32個)
+		変更確認
+		X座標
+		Y座標
+		サイズ
+
+共通オブジェクト
+	存在確認
+	変更確認
+	X座標
+	Y座標
+	横幅
+	縦幅
+	
+
+typedef struct _OBJECT_COMMON_
+{
+	BOOL isExist
+	BOOL isChanging;
+	DWORD x;
+	DWORD y;
+	size_t size_x;
+	size_t size_y;
+} CommonObject;
+
+typedef struct _OBJECT_MAINCHAR_
+{
+	BOOL isChanging;
+	DWORD x;
+	DWORD y;
+
+必要な変数：
+CommonObject myself, enemy;
+CommonObject target[64];
+CommonObject bullet_self[32];
+CommonObject bullet_enemy[32];
+
+

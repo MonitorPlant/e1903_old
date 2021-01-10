@@ -1,0 +1,39 @@
+main.cで以下の構造体を宣言、実体を作成
+```main.c
+typedef struct _COMMON_OBJECT_
+{
+	BOOL isExist; //オブジェクトが存在していればtrue
+	BOOL isChanging; //オブジェクトの中身が変更中であればtrue
+	DWORD x; //オブジェクトの描画開始のX座標
+	DWORD y; //オブジェクトの描画開始のY座標
+	size_t size_x; //オブジェクトの横幅
+	size_t size_y; //オブジェクトの縦幅
+	int type; //描画内容を指定
+} CommonObject;
+
+CommonObject self, enemy; //自分自身と敵の本体
+CommonObject target[ MAX_TARGET_NUM ]; //的 (配列の要素数は32の予定)
+CommonObject bullet[ MAX_BULLET_NUM ]; //弾 (配列の要素数は64の予定)
+
+BOOL end_program = FALSE; //緊急停止用変数(stdlib.hの"exit()"は使わないでほしい)
+int point_self = 0, point_enemy = 0; //自分と敵の得点
+```
+
+display.hでの宣言内容
+```display.h
+#ifndef DISPLAY_H_
+#define DISPLAY_H_
+
+#include <windows.h>
+
+#include "debug.h"
+
+DWORD WINAPI GraphicsThread( LPVOID arg ); //グラフィック用スレッド
+
+#endif /* DISPLAY_H_ */
+```
+
+グラフィックの関数からはオブジェクトの中の変数に書き込まないこと(読み取りのみ)
+描画の内容は自分で考えてください
+わからなかったら会ったときに聞いて
+

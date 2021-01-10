@@ -1,0 +1,28 @@
+作るモジュール timer.h
+	#define HTIMER ( unsigned long *)
+	void setTimer( HTIMER hTimer );
+	DWORD passedTime( HTIMER hTimer );
+	void releaseTimer( HTIMER hTimer );
+
+
+
+弾の処理の流れ
+	発射判定
+	その場に描画
+	タイマー設定
+	一定時間が来るまで弾を静止
+	時間が来たら次のマスに弾を移動
+
+メイン処理
+	プログラム開始
+	メインの処理に入ったらタイマースタート
+	逐一タイマーで残り秒数を確認
+	1分が過ぎたらループを抜け出す
+
+アニメーション
+	アニメーションスタート
+	タイマー設定
+	最初の絵を描画
+	一定時間が経過後
+	次の絵を描画
+	絵がなくなるまでループ
