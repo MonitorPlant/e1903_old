@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <string.h>
 
-#define DWORD (unsigned long)
+//#define DWORD (unsigned long)
 
 void printErrorMessage( char* file_name, char* error_type );
 

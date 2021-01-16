@@ -3,6 +3,7 @@
 
 #include <windows.h>
 
+#include "object.h"
 #include "debug.h"
 
 typedef struct _MOUSE_STATE_
@@ -14,9 +15,8 @@ typedef struct _MOUSE_STATE_
     BOOL click_wheel;
 } MouseState;
 
+DWORD WINAPI MainLoopThread( LPVOID arg ); //ゲーム処理用スレッド
 
-
-DWORD WINAPI MainLoopThread( LPVOID arg );
-BOOL updateMouseState( MouseState m );
+BOOL updateMouseState( MouseState m ); //マウスの状態を更新
 
 #endif /* MAIN_LOOP_THREAD_H_ */

@@ -1,0 +1,2 @@
+@echo off
+bcc32c -tW -WM main.c debug.c timer.c main_loop_thread.c graphics_thread.c data_sync_thread.c

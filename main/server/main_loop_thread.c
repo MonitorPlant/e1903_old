@@ -3,11 +3,24 @@
 #include "debug.h"
 #include "main_loop_thread.h"
 
+extern CommonObject self, enemy;
+extern CommonObject target[ MAX_TARGET_NUM ];
+extern CommonObject bullet[ MAX_BULLET_NUM ];
+
+extern BOOL end_program;
+extern int point_self, point_enemy;
+
 DWORD WINAPI MainLoopThread( LPVOID arg )
 {
-    while( TRUE )
+    MouseState mouse;
+    ( void )arg;
+    while( mouse.click_left == FALSE ) //プレイヤーがマウスをクリックするまで待機
     {
-        
+        updateMouseState( mouse );
+    }
+    while( enemy.isExist == FALSE )//対戦相手が見つかるまで待機
+    {
+        Sleep( 1 );
     }
 
     return 0;

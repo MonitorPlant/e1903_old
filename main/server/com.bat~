@@ -1,2 +1,2 @@
 @echo off
-bcc32c -tW -WM main.c main_loop_thread.c graphics_thread.c data_sync_thread.c input.c debug.c timer.c display.c
+bcc32 -tW -WM -wpar main.c debug.c timer.c main_loop_thread.c graphics_thread.c data_sync_thread.c

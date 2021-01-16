@@ -40,7 +40,7 @@ int main() {
 	*in = 13;
 	
 	printf( "%lu\n", *in );
-	return 0;
+	//return 0;
     while(TRUE) {
         mouse m = updateState(0);
         printf("%d,%d,%d,%d,%d\n", m.x, m.y, m.click_left, m.click_right, m.click_wheel);

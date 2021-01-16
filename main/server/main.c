@@ -1,41 +1,34 @@
 #include <windows.h>
 
-
-
 #include "debug.h"
 #include "main_loop_thread.h"
 #include "graphics_thread.h"
 #include "data_sync_thread.h"
-
-#define MAX_TARGET_NUM 32
-#define MAX_BULLET_NUM 64
-#define TOTAL_OBJECT_NUM ( MAX_TARGET_NUM + MAX_BULLET_NUM + 2 )
-
-typedef struct _COMMON_OBJECT_
-{
-    BOOL isExist;
-    BOOL isChanging;
-    DWORD x;
-    DWORD y;
-    size_t size_x;
-    size_t size_y;
-    int type;
-} CommonObject;
+#include "object.h"
 
 CommonObject self, enemy;
 CommonObject target[ MAX_TARGET_NUM ];
 CommonObject bullet[ MAX_BULLET_NUM ];
 
 BOOL end_program = FALSE;
+BOOL game_over = FALSE;
 int point_self = 0, point_enemy = 0;
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
-    //各スレッドのIDを作成
+    //各スレッドのIDとハンドルを作成
     DWORD MainLoopThreadId, GraphicsThreadId, DataSyncThreadId;
+    HANDLE GraphicsThreadHandle, DataSyncThreadHandle, MainLoopThreadHandle;
+
+    //各変数の初期化
+    self.isExist = enemy.isExist = FALSE;
+    self.isChanging = enemy.isChanging = FALSE;
+    self.x = enemy.x = DISPLAY_MAX_CHAR_Y / 2;
+    self.y = DISPLAY_MAX_CHAR_X / 4;
+    enemy.y = DISPLAY_MAX_CHAR_X / 2;
 
     //グラフィックススレッド起動
-    HANDLE GraphicsThreadHandle = CreateThread(
+    GraphicsThreadHandle = CreateThread(
         NULL, //セキュリティ属性
         0, //スタックサイズ
         GraphicsThread, //スレッド関数本体
@@ -44,7 +37,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         &GraphicsThreadId //スレッドID
     );
     //通信スレッド起動
-    HANDLE DataSyncThreadHandle = CreateThread(
+    DataSyncThreadHandle = CreateThread(
         NULL, //セキュリティ属性
         0, //スタックサイズ
         DataSyncThread, //スレッド関数本体
@@ -53,7 +46,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         &DataSyncThreadId //スレッドID
     );
     //メインスレッド起動
-    HANDLE MainLoopThreadHandle = CreateThread(
+    MainLoopThreadHandle = CreateThread(
         NULL, //セキュリティ属性
         0, //スタックサイズ
         MainLoopThread, //スレッド関数本体
@@ -92,6 +85,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     CloseHandle( MainLoopThreadHandle );
     CloseHandle( GraphicsThreadHandle );
     CloseHandle( DataSyncThreadHandle );
+
+    ( void )hInstance;
+    ( void )hPrevInstance;
+    ( void )lpCmdLine;
+    ( void )nCmdShow;
 
     return 0;
 }

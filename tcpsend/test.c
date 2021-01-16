@@ -22,12 +22,17 @@ int main( void )
 
 	// サーバに接続
 	connect(sock, (struct sockaddr *)&server, sizeof(server));
+	
+	while( TRUE )
+	{
+		// サーバからデータを受信
+		memset(buf, 0, sizeof(buf));
+		int n = recv(sock, buf, sizeof(buf), 0);
 
-	// サーバからデータを受信
-	memset(buf, 0, sizeof(buf));
-	int n = recv(sock, buf, sizeof(buf), 0);
-
-	printf("%d, %s\n", n, buf);
+		printf("%d, %d\n", buf[0], buf[1]);
+		
+		Sleep(1);
+	}
 
 	// winsock2の終了処理
 	WSACleanup();

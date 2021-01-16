@@ -5,39 +5,46 @@
 char self_address[16] = "192.168.0.8";
 char pair_address[16] = "192.168.0.8";
 
+char send_data[2];
+
 int main( void )
 {
-	char num = 236 - 127;
-	printf( "%d\n", num );
-	
 	WSADATA wsaData;
-	SOCKET sock0;
-	struct sockaddr_in addr;
-	struct sockaddr_in client;
-	int len;
 	SOCKET sock;
+	struct sockaddr_in addr;
+	int len;
+	POINT pt;
 
 	// winsock2の初期化
 	WSAStartup(MAKEWORD(2,0), &wsaData);
 	
 	// ソケットの作成
-	sock0 = socket(AF_INET, SOCK_STREAM, 0);
+	sock = socket(AF_INET, SOCK_STREAM, 0);
 
 	// ソケットの設定
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(12345);
 	addr.sin_addr.S_un.S_addr = INADDR_ANY;
-	bind(sock0, (struct sockaddr *)&addr, sizeof(addr));
+	bind(sock, (struct sockaddr *)&addr, sizeof(addr));
 
 	// TCPクライアントからの接続要求を待てる状態にする
-	listen(sock0, 5);
+	listen(sock, 5);
 
 	// TCPクライアントからの接続要求を受け付ける
-	len = sizeof(client);
-	sock = accept(sock0, (struct sockaddr *)&client, &len);
-
-	// 5文字送信
-	send(sock, "HELLO", 5, 0);
+	len = sizeof(addr);
+	sock = accept(sock, (struct sockaddr *)&addr, &len);
+	
+	while( TRUE )
+	{
+		GetCursorPos(&pt);
+		
+		send_data[0] = pt.x / 8 - 127;
+		send_data[1] = pt.y / 16;
+		
+		send( sock, send_data, sizeof(send_data), 0 );
+		
+		Sleep( 15 );
+	}
 
 	// TCPセッションの終了
 	closesocket(sock);
