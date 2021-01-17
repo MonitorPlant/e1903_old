@@ -11,10 +11,17 @@ typedef struct _COMMON_OBJECT_
     BOOL isChanging;
     DWORD x;
     DWORD y;
-    int type;
+    char type;
     int** design;
     size_t size_x;
     size_t size_y;
 } CommonObject;
+
+typedef struct _MOUSE_STATE_
+{
+    BOOL click_left;
+    BOOL click_right;
+    BOOL click_wheel;
+} MouseState;
 
 #endif /* OBJECT_H_ */

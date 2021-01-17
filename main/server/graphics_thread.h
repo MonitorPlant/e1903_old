@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-#include "object.h"
+#include "../common/object.h"
 #include "debug.h"
 
 #define DISPLAY_MAX_CHAR_X 235

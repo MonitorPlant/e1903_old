@@ -4,7 +4,8 @@
 #include <windows.h>
 #include <winsock2.h>
 
-#include "object.h"
+#include "graphics_thread.h"
+#include "../common/object.h"
 #include "debug.h"
 
 DWORD WINAPI DataSyncThread( LPVOID arg );

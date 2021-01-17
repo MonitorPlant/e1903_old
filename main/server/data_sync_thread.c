@@ -2,16 +2,19 @@
 #include <winsock2.h>
 
 #include "debug.h"
-#include "object.h"
+#include "../common/object.h"
 #include "data_sync_thread.h"
 
+extern CommonObject map_source;
 extern CommonObject self, enemy;
 extern CommonObject target[ MAX_TARGET_NUM ];
 extern CommonObject bullet[ MAX_BULLET_NUM ];
+extern MouseState self_mouse, enemy_mouse;
 
 extern BOOL end_program;
-extern BOOL game_over;
-extern int point_self, point_enemy;
+extern BOOL game_end;
+extern char point_self, point_enemy;
+extern char remain_time;
 
 DWORD WINAPI DataSyncThread( LPVOID arg )
 {
@@ -25,9 +28,9 @@ DWORD WINAPI DataSyncThread( LPVOID arg )
 	struct sockaddr_in addr;
 	struct in_addr local_addr;
 	int len;
-	char buf[1024];
 	BOOL yes = 1;
-	char send_data[2] = { 114, 114 };
+    char send_data[6];
+    char receive_data[4];
 	
 	//初期化
 	WSAStartup( MAKEWORD( 2, 0 ), &wsaData );
@@ -75,12 +78,31 @@ DWORD WINAPI DataSyncThread( LPVOID arg )
 	listen( sock, 5 ); //TCPクライントからの接続要求を待つ状態にする
 	len = sizeof( addr );
 	sock = accept( sock, ( struct sockaddr *)&addr, &len );
+
+
+    enemy.isExist = TRUE; //メインスレッドに相手が見つかったことを報告
 	
-	while( game_over == FALSE )
+	while( game_end == FALSE )
 	{
+        //送信内容を書き込み
+        send_data[ 0 ] = remain_time;
+        send_data[ 1 ] = self.x;
+        send_data[ 2 ] = self.y;
+        send_data[ 3 ] = ( self_mouse.click_wheel << 2 ) + ( self_mouse.click_right << 1 ) + ( self_mouse.click_left );
+        
+
+        //データを送受信
 		send( sock, send_data, sizeof( send_data ), 0 );
-		recv( sock, buf, sizeof( buf ), 0 );
+		recv( sock, receive_data, sizeof( receive_data ), 0 );
 		
+
+        //受信内容をコピー
+        enemy.x = receive_data[ 0 ] / 8 + DISPLAY_MAX_CHAR_X / 2;
+        enemy.y = receive_data[ 1 ] / 18;
+        enemy_mouse.click_wheel = ( receive_data[ 2 ] >> 2 ) & 1;
+        enemy_mouse.click_right = ( receive_data[ 2 ] >> 1 ) & 1;
+        enemy_mouse.click_left = receive_data[ 2 ] & 1;
+
 		Sleep( 1 );
 	}
 	

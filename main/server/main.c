@@ -4,28 +4,47 @@
 #include "main_loop_thread.h"
 #include "graphics_thread.h"
 #include "data_sync_thread.h"
-#include "object.h"
+#include "../common/object.h"
 
+CommonObject map_source;
 CommonObject self, enemy;
 CommonObject target[ MAX_TARGET_NUM ];
 CommonObject bullet[ MAX_BULLET_NUM ];
+MouseState self_mouse, enemy_mouse;
 
-BOOL end_program = FALSE;
-BOOL game_over = FALSE;
-int point_self = 0, point_enemy = 0;
+BOOL end_program = FALSE; //プログラム終了もしくは強制終了
+BOOL game_end = FALSE; //ゲーム正常終了
+char point_self = 0, point_enemy = 0;
+char remain_time = 0;
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
+    int i;
     //各スレッドのIDとハンドルを作成
     DWORD MainLoopThreadId, GraphicsThreadId, DataSyncThreadId;
     HANDLE GraphicsThreadHandle, DataSyncThreadHandle, MainLoopThreadHandle;
 
     //各変数の初期化
+    map_source.isExist = TRUE;
+    map_source.isChanging = FALSE;
     self.isExist = enemy.isExist = FALSE;
     self.isChanging = enemy.isChanging = FALSE;
     self.x = enemy.x = DISPLAY_MAX_CHAR_Y / 2;
     self.y = DISPLAY_MAX_CHAR_X / 4;
     enemy.y = DISPLAY_MAX_CHAR_X / 2;
+    self_mouse.click_left = self_mouse.click_right = self_mouse.click_wheel = FALSE;
+    enemy_mouse.click_left = enemy_mouse.click_right = enemy_mouse.click_wheel = FALSE;
+
+    for( i = 0; i < MAX_TARGET_NUM; i++ )
+    {
+        target[ i ].isExist = FALSE;
+        target[ i ].isChanging = FALSE;
+    }
+    for( i = 0; i < MAX_BULLET_NUM; i++ )
+    {
+        bullet[ i ].isExist = FALSE;
+        bullet[ i ].isChanging = FALSE;
+    }
 
     //グラフィックススレッド起動
     GraphicsThreadHandle = CreateThread(
@@ -72,10 +91,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         end_program = TRUE;
     }
 
-    //プログラム終了まで待機
+    //プログラム終了まで待機 もしくはEscapeが押されると強制終了
     while( end_program == FALSE )
     {
-        Sleep(10);
+        Sleep( 10 );
+        if( GetKeyState( VK_ESCAPE ) & 0x8000 )
+        {
+            break;
+        }
     }
 
     //各スレッド終了
