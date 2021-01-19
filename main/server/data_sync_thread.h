@@ -6,7 +6,7 @@
 
 #include "graphics_thread.h"
 #include "../common/object.h"
-#include "debug.h"
+#include "../common/debug.h"
 
 DWORD WINAPI DataSyncThread( LPVOID arg );
 

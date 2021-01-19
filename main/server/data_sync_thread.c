@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <winsock2.h>
 
-#include "debug.h"
+#include "../common/debug.h"
 #include "../common/object.h"
 #include "data_sync_thread.h"
 

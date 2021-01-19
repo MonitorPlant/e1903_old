@@ -1,6 +1,6 @@
 #include <windows.h>
 
-#include "debug.h"
+#include "../common/debug.h"
 #include "main_loop_thread.h"
 #include "graphics_thread.h"
 #include "data_sync_thread.h"
