@@ -20,10 +20,24 @@ extern const int char_target1[5][10], char_target2[5][10], char_target3[3][6], c
 extern const int char_bullet_self[2][8], char_bullet_enemy[2][8];
 extern const int char_self[15][30], char_self_shield[15][30], char_enemy[15][30], char_enemy_shield[15][30];
 
+CONSOLE_SCREEN_BUFFER_INFO csbi;
+HANDLE hCon1, hCon2;
+
+char* msg1 = " ";
+char* msg1_2 = "  ";
+char* msg2 = "\n";
+
+DWORD cbWriten;
+
+int write_end = 0;
+int buffer_1or2 = 1;
+
 DWORD WINAPI GraphicsThread( LPVOID arg )
 {
     SMALL_RECT rc = { 0, 0, DISPLAY_MAX_CHAR_X, DISPLAY_MAX_CHAR_Y };
     COORD coord;
+    int map[ DISPLAY_MAX_CHAR_Y ][ DISPLAY_MAX_CHAR_X ] = {0};
+    int i, j;
     
     coord.X = rc.Right + 1;
 	coord.Y = rc.Bottom + 1;
@@ -53,7 +67,14 @@ DWORD WINAPI GraphicsThread( LPVOID arg )
 
     while( end_program == FALSE )
     {
-        displayUpdate( 
+        //背景を設定
+        if( map_source.isExist )
+        {
+            writeObject( map, map_source );
+        }
+
+        //画面を出力
+        displayUpdate( map );
     }
 
     ( void )arg;
@@ -62,29 +83,143 @@ DWORD WINAPI GraphicsThread( LPVOID arg )
 
 void displayUpdate( int map[ DISPLAY_MAX_CHAR_Y ][ DISPLAY_MAX_CHAR_X ] )
 {
-    int i;
-    while( TRUE )
-    {
-        //writeObject( map, map_source ); //背景を書き込む
-        //writeObject( map, self ); //自分の絵を書き込む
-        //writeObject( map, enemy ); //敵の絵を書き込む
-        for( i = 0; i < MAX_TARGET_NUM; i++ ) //的の絵を書き込む
-        {
-            if( target[ i ].isExist == TRUE )
-            {
-                //writeObject( map, target[ i ] );
-            }
-        }
-        for( i = 0; i < MAX_BULLET_NUM; i++ ) //弾丸の絵を書き込む
-        {
-            if( bullet[ i ].isExist == TRUE )
-            {
-                //writeObject( map, target[ i ] );
-            }
-        }
+    int i, j, l;
+    int dont_write = 0;
+    int count_same = 0;
 
-        //この後にダブルバッファリングの処理を入れる
-    }
+    if (buffer_1or2 == 1 & write_end == 0) {
+
+		for (i = 0; i < 67; i++) {
+
+			for (j = 1; j < 235; j++) {
+				if (map[i][j] == map[i][j + 1]) {
+					count_same++;
+				}
+				if (count_same == 234) {
+					setCursorPos_1(j, i + 1);
+					dont_write = 1;
+			}
+		}
+				for (j = 0; j < 236; j++) {
+				
+					dont_write = 0;
+					if (j != 0 & map[i][j] != map[i][j - 1]) {
+						switch (map[i][j]) {
+						case 0:
+							if (map[i][j - 1] != 0) {
+								SetConsoleTextAttribute(hCon1, NULL);
+							}
+							else {
+								setCursorPos_1(j+1, i);
+								dont_write = 1;
+							}
+							break;
+						case 1: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE); break;
+						case 2: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN); break;
+						case 3: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE); break;
+						case 4: SetConsoleTextAttribute(hCon1, BACKGROUND_RED); break;
+						case 5: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED); break;
+						case 6: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED); break;
+						case 7: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE); break;
+						case 8:	SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+						case 9:	SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+						case 'A': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_INTENSITY); break;
+						case 'B': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+						case 'C': SetConsoleTextAttribute(hCon1, BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+						case 'D': SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+						case 'E': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+						case 'F': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY);break;
+						}
+					}
+					if(dont_write != 1)
+					WriteConsole(hCon1, msg1, lstrlen(msg1), &cbWriten, NULL);
+				}
+			setCursorPos_1(0, i + 1);
+		}
+		SetConsoleActiveScreenBuffer(hCon1);
+
+		buffer_1or2 = 2;
+		write_end = 1;
+	}
+
+
+	if (buffer_1or2 == 2 & write_end == 0) {
+
+		for (i = 0; i < 67; i++) {
+
+				for (j = 1; j < 235; j++) {
+					if (map[i][j] == map[i][j + 1]) {
+						count_same++;
+					}
+					if (count_same == 234){
+						setCursorPos_2(j, i+1);
+						dont_write = 1;
+					}
+
+					
+				}
+			
+			for (j = 0; j < 236; j++) {
+				dont_write = 0;
+
+				if (j != 0 & map[i][j] != map[i][j - 1]) {
+
+					
+					switch (map[i][j]) {
+						case 0:
+							if (map[i][j - 1] != 0) {
+								SetConsoleTextAttribute(hCon2, NULL);
+							}
+							else
+							{
+								setCursorPos_2(j + 1, i);
+								dont_write = 1;
+							}
+							break;
+						case 1: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE); break;
+						case 2: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN); break;
+						case 3: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE); break;
+						case 4: SetConsoleTextAttribute(hCon1, BACKGROUND_RED); break;
+						case 5: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED); break;
+						case 6: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED); break;
+						case 7: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE); break;
+						case 8:	SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+						case 9:	SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+						case 'A': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_INTENSITY); break;
+						case 'B': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+						case 'C': SetConsoleTextAttribute(hCon1, BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+						case 'D': SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+						case 'E': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+						case 'F': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY);break;
+					}
+
+				}
+				if (dont_write != 1)
+					WriteConsole(hCon2, msg1, lstrlen(msg1), &cbWriten, NULL);
+			}
+			setCursorPos_2(0, i + 1);
+		}
+		SetConsoleActiveScreenBuffer(hCon2);
+
+		buffer_1or2 = 1;
+		write_end = 1;
+	}
+}
+
+void setCursorPos_1(int x, int y)
+{
+	COORD pos;
+	pos.X = x;
+	pos.Y = y;
+	SetConsoleCursorPosition(hCon1, pos);
+}
+
+void setCursorPos_2(int x, int y)
+{
+	COORD pos;
+	pos.X = x;
+	pos.Y = y;
+	SetConsoleCursorPosition(hCon2, pos);
 }
 
 //引数として渡されたオブジェクトをint型の配列に数字として書き込む関数
