@@ -98,43 +98,45 @@ void displayUpdate( int map[ DISPLAY_MAX_CHAR_Y ][ DISPLAY_MAX_CHAR_X ] )
 				if (count_same == 234) {
 					setCursorPos_1(j, i + 1);
 					dont_write = 1;
-			}
-		}
-				for (j = 0; j < 236; j++) {
-				
-					dont_write = 0;
-					if (j != 0 & map[i][j] != map[i][j - 1]) {
-						switch (map[i][j]) {
-						case 0:
-							if (map[i][j - 1] != 0) {
-								SetConsoleTextAttribute(hCon1, NULL);
-							}
-							else {
-								setCursorPos_1(j+1, i);
-								dont_write = 1;
-							}
-							break;
-						case 1: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE); break;
-						case 2: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN); break;
-						case 3: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE); break;
-						case 4: SetConsoleTextAttribute(hCon1, BACKGROUND_RED); break;
-						case 5: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED); break;
-						case 6: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED); break;
-						case 7: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE); break;
-						case 8:	SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
-						case 9:	SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
-						case 'A': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_INTENSITY); break;
-						case 'B': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
-						case 'C': SetConsoleTextAttribute(hCon1, BACKGROUND_RED | BACKGROUND_INTENSITY); break;
-						case 'D': SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
-						case 'E': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
-						case 'F': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY);break;
-						}
-					}
-					if(dont_write != 1)
-					WriteConsole(hCon1, msg1, lstrlen(msg1), &cbWriten, NULL);
-				}
-			setCursorPos_1(0, i + 1);
+			    }
+		    }
+            for (j = 0; j < 236; j++) {
+            
+                dont_write = 0;
+                if (j != 0 & map[i][j] != map[i][j - 1]) {
+                    switch (map[i][j]) {
+                    case 0:
+                        if (map[i][j - 1] != 0) {
+                            SetConsoleTextAttribute(hCon1, NULL);
+                        }
+                        else {
+                            setCursorPos_1(j+1, i);
+                            dont_write = 1;
+                        }
+                        break;
+                    case   1: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE); break;
+                    case   2: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN); break;
+                    case   3: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE); break;
+                    case   4: SetConsoleTextAttribute(hCon1, BACKGROUND_RED); break;
+                    case   5: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED); break;
+                    case   6: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED); break;
+                    case   7: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE); break;
+                    case   8: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+                    case   9: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+                    case 'A': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_INTENSITY); break;
+                    case 'B': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+                    case 'C': SetConsoleTextAttribute(hCon1, BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+                    case 'D': SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+                    case 'E': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+                    case 'F': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY);break;
+                    }
+                }
+                if(dont_write != 1)
+                {
+                    WriteConsole(hCon1, msg1, lstrlen(msg1), &cbWriten, NULL);
+                }
+            }
+        setCursorPos_1(0, i + 1);
 		}
 		SetConsoleActiveScreenBuffer(hCon1);
 
@@ -147,57 +149,52 @@ void displayUpdate( int map[ DISPLAY_MAX_CHAR_Y ][ DISPLAY_MAX_CHAR_X ] )
 
 		for (i = 0; i < 67; i++) {
 
-				for (j = 1; j < 235; j++) {
-					if (map[i][j] == map[i][j + 1]) {
-						count_same++;
-					}
-					if (count_same == 234){
-						setCursorPos_2(j, i+1);
-						dont_write = 1;
-					}
-
-					
+			for (j = 1; j < 235; j++) {
+				if (map[i][j] == map[i][j + 1]) {
+					count_same++;
 				}
-			
-			for (j = 0; j < 236; j++) {
-				dont_write = 0;
+				if (count_same == 234){
+					setCursorPos_2(j, i+1);
+					dont_write = 1;
+		    	}
+		    }
+        
+            for (j = 0; j < 236; j++) {
+                dont_write = 0;
 
-				if (j != 0 & map[i][j] != map[i][j - 1]) {
-
-					
-					switch (map[i][j]) {
-						case 0:
-							if (map[i][j - 1] != 0) {
-								SetConsoleTextAttribute(hCon2, NULL);
-							}
-							else
-							{
-								setCursorPos_2(j + 1, i);
-								dont_write = 1;
-							}
-							break;
-						case 1: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE); break;
-						case 2: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN); break;
-						case 3: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE); break;
-						case 4: SetConsoleTextAttribute(hCon1, BACKGROUND_RED); break;
-						case 5: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED); break;
-						case 6: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED); break;
-						case 7: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE); break;
-						case 8:	SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
-						case 9:	SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
-						case 'A': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_INTENSITY); break;
-						case 'B': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
-						case 'C': SetConsoleTextAttribute(hCon1, BACKGROUND_RED | BACKGROUND_INTENSITY); break;
-						case 'D': SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
-						case 'E': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
-						case 'F': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY);break;
-					}
-
-				}
-				if (dont_write != 1)
-					WriteConsole(hCon2, msg1, lstrlen(msg1), &cbWriten, NULL);
-			}
-			setCursorPos_2(0, i + 1);
+                if (j != 0 & map[i][j] != map[i][j - 1]) {
+                    switch (map[i][j]) {
+                        case 0:
+                            if (map[i][j - 1] != 0) {
+                                SetConsoleTextAttribute(hCon2, NULL);
+                            }
+                            else
+                            {
+                                setCursorPos_2(j + 1, i);
+                                dont_write = 1;
+                            }
+                            break;
+                        case   1: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE); break;
+                        case   2: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN); break;
+                        case   3: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE); break;
+                        case   4: SetConsoleTextAttribute(hCon1, BACKGROUND_RED); break;
+                        case   5: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED); break;
+                        case   6: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED); break;
+                        case   7: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE); break;
+                        case   8: SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+                        case   9: SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+                        case 'A': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_INTENSITY); break;
+                        case 'B': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY); break;
+                        case 'C': SetConsoleTextAttribute(hCon1, BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+                        case 'D': SetConsoleTextAttribute(hCon1, BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+                        case 'E': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); break;
+                        case 'F': SetConsoleTextAttribute(hCon1, BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_INTENSITY);break;
+                    }
+                }
+                if (dont_write != 1)
+                    WriteConsole(hCon2, msg1, lstrlen(msg1), &cbWriten, NULL);
+            }
+            setCursorPos_2(0, i + 1);
 		}
 		SetConsoleActiveScreenBuffer(hCon2);
 

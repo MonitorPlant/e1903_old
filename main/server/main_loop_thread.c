@@ -33,23 +33,27 @@ DWORD WINAPI MainLoopThread( LPVOID arg )
     while( enemy.isExist == FALSE )
     {
         //500msごとにロード画面を切り替え
-        switch( ( passedTime( main_timer ) / 500 ) % 3 )
+        switch( ( passedTime( main_timer ) / 500 ) % 4 )
         {
             case 0:
                 map_source.isChanging = TRUE;
-                /* map_source.type = LOADING. */
+                map_source.type = TYPE_LOADING0;
                 map_source.isChanging = FALSE;
                 break;
             case 1:
                 map_source.isChanging = TRUE;
-                /* map_source.type = LOADING.. */
+                map_source.type = TYPE_LOADING1;
                 map_source.isChanging = FALSE;
                 break;
             case 2:
                 map_source.isChanging = TRUE;
-                /* map_source.type = LOADING... */
+                map_source.type = TYPE_LOADING2;
                 map_source.isChanging = FALSE;
                 break;
+            case 3:
+                map_source.isChanging = TRUE;
+                map_source.type = TYPE_LOADING3;
+                map_source.isChanging = FALSE;
         }
         Sleep( 1 );
     }
